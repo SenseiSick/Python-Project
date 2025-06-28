@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Todo List</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        h1 { color: #333; }
+        form { margin-bottom: 20px; }
+        input[type="text"] { padding: 8px; width: 70%; }
+        button { padding: 8px 15px; background: #4CAF50; color: white; border: none; }
+        ul { list-style: none; padding: 0; }
+        li { padding: 10px; border-bottom: 1px solid #eee; display: flex; align-items: center; }
+        li span { flex-grow: 1; }
+        a { margin-left: 10px; color: #0066cc; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .done { text-decoration: line-through; color: #888; }
+    </style>
+</head>
+<body>
+    <h1>My Todo List</h1>
+    <form method="post" action="/add/">
+        {% csrf_token %}
+        <input type="text" name="task" placeholder="Add a new task" required>
+        <button type="submit">Add Task</button>
+    </form>
+    <ul>
+    {% for todo in object_list %}
+        <li class="{% if todo.done %}done{% endif %}">
+            <span>{{ todo.task }}</span>
+            <a href="/complete/{{ todo.id }}/">{% if todo.done %}Undo{% else %}Complete{% endif %}</a>
+            <a href="/delete/{{ todo.id }}/">Delete</a>
+        </li>
+    {% empty %}
+        <li>No tasks yet. Add one above!</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
